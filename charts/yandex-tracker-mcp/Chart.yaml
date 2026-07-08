@@ -1,0 +1,15 @@
+apiVersion: v2
+name: yandex-tracker-mcp
+description: MCP Yandex Tracker - Model Context Protocol server for Yandex Tracker API
+type: application
+version: 0.1.0
+appVersion: "0.7.2"
+
+dependencies:
+  - name: common
+    version: 2.31.4
+    repository: https://charts.bitnami.com/bitnami
+  - name: redis
+    version: 21.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}-env
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.labels "context" $ ) | nindent 4 }}
+data:
+  TRANSPORT: {{ .Values.transport | quote }}
+  HOST: {{ .Values.host | quote }}
+  PORT: {{ .Values.port | quote }}
+  TRACKER_API_BASE_URL: {{ .Values.tracker.apiUrl | quote }}
+  {{- if .Values.tracker.cloudOrgId }}
+  TRACKER_CLOUD_ORG_ID: {{ .Values.tracker.cloudOrgId | quote }}
+  {{- end }}
+  {{- if .Values.tracker.orgId }}
+  TRACKER_ORG_ID: {{ .Values.tracker.orgId | quote }}
+  {{- end }}
+  {{- if .Values.tracker.limitQueues }}
+  TRACKER_LIMIT_QUEUES: {{ .Values.tracker.limitQueues | quote }}
+  {{- end }}
+  TRACKER_READ_ONLY: {{ .Values.tracker.readOnly | quote }}
+  {{- if .Values.cache.enabled }}
+  TOOLS_CACHE_ENABLED: "true"
+  TOOLS_CACHE_REDIS_TTL: {{ .Values.cache.redisTtl | quote }}
+  {{- end }}
+  {{- if .Values.redis.enabled }}
+  REDIS_ENDPOINT: {{ include "yandex-tracker-mcp.redis.fullname" . }}-master
+  REDIS_PORT: {{ include "yandex-tracker-mcp.redis.port" . | quote }}
+  {{- else if .Values.externalRedis.host }}
+  REDIS_ENDPOINT: {{ include "yandex-tracker-mcp.redis.host" . | quote }}
+  REDIS_PORT: {{ include "yandex-tracker-mcp.redis.port" . | quote }}
+  {{- end }}
+  {{- if .Values.oauth.enabled }}
+  OAUTH_ENABLED: "true"
+  OAUTH_CLIENT_ID: {{ .Values.oauth.clientId | quote }}
+  OAUTH_SERVER_URL: {{ .Values.oauth.serverUrl | quote }}
+  OAUTH_TOKEN_TYPE: {{ .Values.oauth.tokenType | quote }}
+  OAUTH_USE_SCOPES: {{ .Values.oauth.useScopes | quote }}
+  OAUTH_STORE: {{ .Values.oauth.store | quote }}
+  {{- if .Values.oauth.publicUrl }}
+  MCP_SERVER_PUBLIC_URL: {{ .Values.oauth.publicUrl | quote }}
+  {{- end }}
+  {{- end }}

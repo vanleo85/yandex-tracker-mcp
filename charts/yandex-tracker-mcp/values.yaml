@@ -1,0 +1,168 @@
+# Global
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  security:
+    allowInsecureImages: false
+
+# Naming
+fullnameOverride: ""
+labels: {}
+annotations: {}
+
+# Image
+image:
+  registry: ghcr.io
+  repository: aikts/yandex-tracker-mcp
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# Transport
+transport: streamable-http
+host: "0.0.0.0"
+port: 8000
+
+# Authentication
+# Use existingSecret to reference a pre-created Kubernetes Secret
+# If existingSecret is set, auth.* values are ignored
+existingSecret: ""
+auth:
+  token: ""
+  iamToken: ""
+  serviceAccount:
+    keyId: ""
+    serviceAccountId: ""
+    privateKey: ""
+
+# Organization
+tracker:
+  cloudOrgId: ""
+  orgId: ""
+  apiUrl: "https://api.tracker.yandex.net"
+  limitQueues: ""
+  readOnly: false
+
+# Redis
+redis:
+  enabled: false
+  architecture: standalone
+  auth:
+    enabled: false
+    password: ""
+externalRedis:
+  host: ""
+  port: 6379
+  password: ""
+
+# Cache
+cache:
+  enabled: false
+  redisTtl: 3600
+
+# OAuth (MCP server OAuth provider mode, NOT Redis OAuth)
+oauth:
+  enabled: false
+  clientId: ""
+  clientSecret: ""
+  serverUrl: "https://oauth.yandex.ru"
+  tokenType: "Bearer"
+  useScopes: true
+  store: "memory"
+  encryptionKeys: ""
+  publicUrl: ""
+
+# External Secrets
+externalSecrets:
+  enabled: false
+  path: ""
+
+# Resources
+resources: {}
+resourcesPreset: "none"
+
+# Replicas
+replicas: 1
+
+# Strategy
+strategy: Recreate
+
+# Ports
+containerPorts:
+  http: 8000
+
+# Pod settings
+podAnnotations: {}
+podLabels: {}
+
+# Security context
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+
+# Probes
+customLivenessProbe: {}
+customReadinessProbe: {}
+customStartupProbe: {}
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 5
+  successThreshold: 1
+
+startupProbe:
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 30
+  successThreshold: 1
+
+# Diagnostic mode
+diagnosticMode:
+  enabled: false
+
+# Command
+command: []
+args: []
+
+# Service
+service:
+  type: ClusterIP
+  ports:
+    http: 80
+  annotations: {}
+
+# Ingress
+ingress:
+  enabled: false
+  className: "ingress-nginx"
+  host: ""
+  secretName: ""
+
+# Affinity
+affinity: {}
+nodeSelector: {}
+tolerations: []
+nodeAffinityPreset:
+  type: ""
+  key: ""
+  values: []
